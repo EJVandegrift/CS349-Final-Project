@@ -39,12 +39,12 @@ def make_romance_only_file(romance_movies_file, file_to_clean, new_file, movie_i
     movie in them
     """
     
-    romance_movie_data = open(romance_movies_file, "r", errors=="")
+    romance_movie_data = open(romance_movies_file, "r")
     all_lines = romance_movie_data.readlines()
     romance_movie_ids = [cur_movie_data.split("::")[0] for cur_movie_data in all_lines]
 
     # All files should have first row be column headers - descriptions - so ignore it
-    old_data = open(file_to_clean[1:], "r")
+    old_data = open(file_to_clean, "r")
     new_data = open(new_file, "w")    
     
     
@@ -52,5 +52,3 @@ def make_romance_only_file(romance_movies_file, file_to_clean, new_file, movie_i
         if line.split(",")[movie_id_index] in romance_movie_ids:
             new_data.write(line)
     
-
-make_romance_only_file("romance.txt", "ratings.csv", "romance_ratings.csv", 1)
