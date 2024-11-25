@@ -32,9 +32,25 @@ def make_romance_only_file(movies_dat, romance_dat):
         if "Romance" in line or "romance" in line:
             romance_only.write(line)
 
-def make_romance_only_file(romance_movies_file, other_file, movie_id_index):
-    romance_movie_data = open(romance_movies_file, "r")
-    romance_movie_ids = [movie_data[0] for movie_data in romance_movie_data.readlines()]
-
-    new_file = other_file
+def make_romance_only_file(romance_movies_file, file_to_clean, new_file, movie_id_index):
+    """
+    Finds the movie id's that are associated with Romance and 
+    adjusts other files to only include rows that have a romance
+    movie in them
+    """
     
+    romance_movie_data = open(romance_movies_file, "r", errors=="")
+    all_lines = romance_movie_data.readlines()
+    romance_movie_ids = [cur_movie_data.split("::")[0] for cur_movie_data in all_lines]
+
+    # All files should have first row be column headers - descriptions - so ignore it
+    old_data = open(file_to_clean[1:], "r")
+    new_data = open(new_file, "w")    
+    
+    
+    for line in old_data.readlines():
+        if line.split(",")[movie_id_index] in romance_movie_ids:
+            new_data.write(line)
+    
+
+make_romance_only_file("romance.txt", "ratings.csv", "romance_ratings.csv", 1)
